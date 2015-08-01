@@ -9,6 +9,25 @@ perl get_iplayer http://www.bbc.co.uk/iplayer/episode/b064449w/the-worlds-worst-
 python convertSubtitles.py nameoffile
 
 #Convert into CSV
-echo we have the SRT python library for this - Maybe, in fact, we do it directly from convertSubtitles.py
-
+python convert_srt_to_sup.py #needs to take in arguments (and have a test suite)
 #Upload to google drive
+
+
+def test_cases_to_write(): 
+"""
+We need, 
+
+Several checks that we are downloading the correct file
+	find out if there is a file comparison bit of the unit testing
+Check the empty file. 
+Check extremely long file (in terms of content, and of time passing) 
+Several checks that the file we convert matches our other examples. 
+Several checks that converting to *.sup format works 
+
+Several checks that the *.sup format, once downloaded, works with the rest of the framework. 
+A long form check, with an srt file going up, coming down and converting to english. 
+
+
+"""
+	pass
+
