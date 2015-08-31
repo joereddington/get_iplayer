@@ -1,5 +1,60 @@
 import os
 import convertSubtitles
+import pysrt
+import csv
+
+from pydrive.auth import GoogleAuth
+from pydrive.drive import GoogleDrive
+
+
+def enguage_auth():
+        gauth = GoogleAuth()
+        gauth.LoadCredentialsFile("mycreds.txt")
+        if gauth.credentials is None:
+                # Authenticate if they're not there
+                gauth.LocalWebserverAuth()
+        elif gauth.access_token_expired:
+                # Refresh them if expired
+                gauth.Refresh()
+        else:
+                # Initialize the saved creds
+                gauth.Authorize()
+        # Save the current credentials to a file
+        gauth.SaveCredentialsFile("mycreds.txt")
+        # from http://stackoverflow.com/a/24542604/170243
+        gauth.LocalWebserverAuth()
+        return gauth
+
+def upload_csv(filename):
+    drive = GoogleDrive(enguage_auth())
+    file5 = drive.CreateFile()
+    # Read file and set it as a content of this instance.
+    file5.SetContentFile(filename)
+    file5.Upload({'convert':True})  # Upload it
+
+
+def convert_srt_to_sup(filename):
+    subs = pysrt.open(filename)
+    with open("out.csv", "wb") as f:
+            writer = csv.writer(f)
+            writer.writerow(
+                ("Start",
+                 "End",
+                 "Character",
+                 "Original Text",
+                 "Translation",
+                 "Machine Translations"))
+            for caption in subs:
+                    writer.writerow(
+                        (caption.start,
+                         caption.end,
+                         "",
+                         caption.text,
+                         "",
+                         ""))
+
+
+
 #Here's what I want, I want to download subtitle files, convert them into CVS ones and make them ready to go up to Google Drive.
 
 #Let's work this out.
@@ -9,16 +64,14 @@ os.system("perl get_iplayer --force "+URL+" --modes=subtitles")
 
 
 #Convert to SRT
-
 convertSubtitles.ttml2srt(["lastdownloaded.srt"],False,False)
-#python convertSubtitles.py lastdownloaded.srt
 
-#Convert into CSV
+#Convert into CSV (which I'm choosing to call *.Sup)
+#filename is lastdownloaded_converted.srt'
 
-
-os.system("python convert_srt_to_sup.py") #needs to take in arguments (and have a test suite)
+convert_srt_to_sup('lastdownloaded_converted.srt')
 #Upload to google drive
-os.system("./upload_csv.py")
+upload_csv('out.csv')
 
 def test_cases_to_write():
 	"""
