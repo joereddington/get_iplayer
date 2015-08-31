@@ -1386,7 +1386,8 @@ sub list_progs {
 			# subs (only for tv)
 			if ( $opt->{subsonly} && $this->{type} eq 'tv') {
 				$this->create_dir();
-				$this->download_subtitles( $ua, "$this->{dir}/$this->{fileprefix}.srt" );
+				$this->download_subtitles( $ua, "$this->{dir}/fetchedsubs.srt" );
+				# alterted by JR$this->download_subtitles( $ua, "$this->{dir}/$this->{fileprefix}.srt" );
 			}
 			# metadata
 			if ( $opt->{metadataonly} ) {
@@ -4976,7 +4977,7 @@ sub generate_filenames {
 	# Add modename to default format string if multimode option is used
 	$format .= ' <mode>' if $opt->{multimode};
 
-	$prog->{fileprefix} = $opt->{fileprefix} || $format;
+	$prog->{fileprefix} = 'lastdownloaded'; #JR$opt->{fileprefix} || $format;
 
 	# get $name, $episode from title
 	my ( $name, $episode ) = Programme::bbciplayer::split_title( $prog->{title} ) if $prog->{title};
@@ -8899,8 +8900,8 @@ sub download {
 	my $subfile_done;
 	my $subfile;
 	if ( $opt->{subtitles} ) {
-		$subfile_done = "$prog->{dir}/$prog->{fileprefix}.srt";
-		$subfile = "$prog->{dir}/$prog->{fileprefix}.partial.srt";
+		$subfile_done = "$prog->{dir}/fetchedsubs.srt";
+		$subfile = "$prog->{dir}/fetchedsubs.partial.srt";
 		main::logger "\n";
 		if ( $prog->download_subtitles( $ua, $subfile ) && $opt->{subsrequired} && $prog->{type} eq 'tv') {
 			main::logger "WARNING: Subtitles not available and --subsrequired specified.\n";
@@ -8944,7 +8945,8 @@ sub download_subtitles {
 	my ( $ua, $file ) = @_;
 	my $suburl;
 	my $subs;
-	
+	print $file;	
+	print "HELLO WORLD1!1";
 	# Don't redownload subs if the file already exists
 	if ( ( -f $file || -f "$prog->{dir}/$prog->{fileprefix}.partial.srt" ) && ! $opt->{overwrite} ) {
 		main::logger "INFO: Skipping subtitles download - file already exists: $file\n" if $opt->{verbose};
