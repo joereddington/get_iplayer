@@ -44,7 +44,7 @@ def enguage_auth():
 
 def upload_csv(filename):
         drive = GoogleDrive(enguage_auth())
-        file5 = drive.CreateFile()
+        file5 = drive.CreateFile({"parents": [{"kind": "drive#fileLink","id":"0BxcNVxCOXNUvfkIyMWxIcGU2WkdfX0FiOTljYzVlZ1V5eW5NXzY0bHpQUGpPV3hfTkI1VHM" }]})
         # Read file and set it as a content of this instance.
         file5.SetContentFile(filename)
         file5.Upload({'convert': True})  # Upload it
