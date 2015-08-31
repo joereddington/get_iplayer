@@ -6,6 +6,22 @@ import csv
 from pydrive.auth import GoogleAuth
 from pydrive.drive import GoogleDrive
 
+import argparse
+
+def setup_argument_list():
+     "creates and parses the argument list for naCount"
+     parser = argparse.ArgumentParser(
+         description=__doc__)
+     parser.add_argument('-u', nargs="?",dest='url',
+                         help="Allows use of a folder url from the commandline")
+     return parser.parse_args()
+
+def get_url():
+     args=setup_argument_list()
+     url=DEFAULT_URL
+     if args.url:
+             url=args.url
+     return url
 
 def enguage_auth():
         gauth = GoogleAuth()
@@ -47,16 +63,12 @@ def convert_srt_to_sup(input_file, out_file):
                      "Machine Translations"))
                 for caption in subs:
                         writer.writerow(
-                            (caption.start,
-                             caption.end,
-                             "",
-                             caption.text,
-                             "",
-                             ""))
+                            (caption.start, caption.end, "", caption.text, "", ""))
 
 
 
-URL = "http://www.bbc.co.uk/iplayer/episode/b068232r/secrets-of-china-1-fit-in-or-fail"
+DEFAULT_URL = "http://www.bbc.co.uk/iplayer/episode/b068232r/secrets-of-china-1-fit-in-or-fail"
+URL=get_url()
 name = URL.rpartition('/')[2]+".csv"
 
 os.system("perl get_iplayer --force "+URL+" --modes=subtitles")
