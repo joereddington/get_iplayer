@@ -1,7 +1,8 @@
 import pysrt
 import csv
 
-subs = pysrt.open('testfiles/hair.srt')
+subs = pysrt.open('lastdownloaded_converted.srt')
+
 
 with open("out.csv", "wb") as f:
         writer = csv.writer(f)
