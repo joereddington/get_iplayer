@@ -3,15 +3,15 @@
 #Let's work this out. 
 
 #Download: done. 
-perl get_iplayer http://www.bbc.co.uk/iplayer/episode/b064449w/the-worlds-worst-place-to-be-disabled --modes=subtitles
+perl get_iplayer http://www.bbc.co.uk/iplayer/episode/b068232r/secrets-of-china-1-fit-in-or-fail --modes=subtitles
 
 #Convert to SRT
-python convertSubtitles.py nameoffile
+python convertSubtitles.py lastdownloaded.srt
 
 #Convert into CSV
 python convert_srt_to_sup.py #needs to take in arguments (and have a test suite)
 #Upload to google drive
-
+./upload_csv.py
 
 def test_cases_to_write(): 
 """
