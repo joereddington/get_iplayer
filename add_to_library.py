@@ -62,8 +62,9 @@ def convert_srt_to_sup(input_file, out_file):
                      "Translation",
                      "Machine Translations"))
                 for caption in subs:
+                        print caption.text
                         writer.writerow(
-                            (caption.start, caption.end, "", caption.text, "", ""))
+                            (caption.start, caption.end, "", caption.text.encode('latin-1'), "", ""))
 
 
 
