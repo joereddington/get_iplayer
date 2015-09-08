@@ -42,11 +42,12 @@ def enguage_auth():
         return gauth
 
 
-def upload_csv(filename):
+def upload_csv(name_here,name_there):
         drive = GoogleDrive(enguage_auth())
         file5 = drive.CreateFile({"parents": [{"kind": "drive#fileLink","id":"0BxcNVxCOXNUvfkIyMWxIcGU2WkdfX0FiOTljYzVlZ1V5eW5NXzY0bHpQUGpPV3hfTkI1VHM" }]})
         # Read file and set it as a content of this instance.
-        file5.SetContentFile(filename)
+        file5.SetContentFile(name_here)
+        file5['title']=name_there
         file5.Upload({'convert': True})  # Upload it
 
 
@@ -70,7 +71,8 @@ def convert_srt_to_sup(input_file, out_file):
 
 DEFAULT_URL = "http://www.bbc.co.uk/iplayer/episode/b068232r/secrets-of-china-1-fit-in-or-fail"
 URL=get_url()
-name = URL.rpartition('/')[2]+".csv"
+name_there = URL.rpartition('/')[2]
+name_here = name_there+".csv"
 
 os.system("perl get_iplayer --force "+URL+" --modes=subtitles")
 # Download: done.
@@ -79,9 +81,9 @@ os.system("perl get_iplayer --force "+URL+" --modes=subtitles")
 convertSubtitles.ttml2srt(["lastdownloaded.srt"], False, False)
 
 # Convert into CSV (which I'm choosing to call *.Sup)
-convert_srt_to_sup('lastdownloaded_converted.srt', name)
+convert_srt_to_sup('lastdownloaded_converted.srt', name_here)
 # Upload to google drive
-upload_csv(name)
+upload_csv(name_here,name_there)
 
 
 def test_cases_to_write():
